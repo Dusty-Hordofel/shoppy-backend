@@ -1,0 +1,2 @@
+# Get Request from App controller
+GET http://localhost:5400/users

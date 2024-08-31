@@ -1,0 +1,5 @@
+# Get Request from App controller
+POST http://localhost:5600/users
+Content-Type:application/json
+
+{}
