@@ -12,3 +12,7 @@
 ## 5. Passport JS - Jwt
 
 ## 6. Mise en œuvre du JWT Passport
+
+## 7. Implémenter des protections de route protégée et de stratégie JWT
+
+## 8. Extension des gardes
