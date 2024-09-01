@@ -1,2 +1,4 @@
 # Get Request from App controller
-GET http://localhost:5400/users
+GET http://localhost:5500/profile
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImpvaG4iLCJzdWIiOjEsImlhdCI6MTcyNTIyMzc4MSwiZXhwIjoxNzI1MjI3MzgxfQ.kjXVbiMWb4pF0wlvuSUMOeR-5SSI0DUMVn7Bl_hi6Qw
+
