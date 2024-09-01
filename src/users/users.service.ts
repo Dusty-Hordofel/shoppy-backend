@@ -11,18 +11,16 @@ export class UsersService {
   async createUser(data: CreateUserRequest): Promise<Omit<User, 'password'>> {
     console.log('🚀 ~ UsersService ~ createUser ~ data:', data);
 
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    // const hashedPassword = await bcrypt.hash(data.password, 10);
 
     try {
-      const user = this.prismaService.user.create({
-        data: { ...data, password: hashedPassword },
+      return await this.prismaService.user.create({
+        data: { ...data, password: await bcrypt.hash(data.password, 10) },
         select: {
           id: true,
           email: true,
         },
       });
-
-      return user;
     } catch (error) {
       console.log('🚀 ~ UsersService ~ createUser ~ error:', error);
       if (error.code === 'P2002') {
