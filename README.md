@@ -15,4 +15,6 @@
 
 ## 7. Implémenter des protections de route protégée et de stratégie JWT
 
-## 8. Extension des gardes
+## 8. Extension des gardes (a lire et mettre en place)
+
+## 9. Activer l'authentification globalement (a exploiter et experimenter)
