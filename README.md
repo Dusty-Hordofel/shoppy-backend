@@ -18,3 +18,9 @@
 ## 8. Extension des gardes (a lire et mettre en place)
 
 ## 9. Activer l'authentification globalement (a exploiter et experimenter)
+
+## Section 2: Shoppy Authentication
+
+### 12. Local Strategy
+
+### 13. Sign JWT
