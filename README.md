@@ -8,3 +8,7 @@
 - création de l'utilisateur
 
 ## 4. Passport JS
+
+## 5. Passport JS - Jwt
+
+## 6. Mise en œuvre du JWT Passport
