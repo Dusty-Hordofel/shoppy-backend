@@ -1,0 +1,13 @@
+45. Documentation With NestJS.md
+46. Open API Specification.md
+47. Enabling Swagger in NestJS.md
+48. Adding Configuration Methods to Swagger.md
+49. Documenting GET users.md
+50. Practice: POST Endpoint and DTO For Posts Controller.md
+51. Solution: POST Endpoint and DTO For Posts Controller.md
+52. Adding Validations To CreatePostDto.md
+53. Working With Nested DTOs.md
+54. Testing Validation.md
+55. Using Swagger For Documenting CreatePostDto.md
+56. Mapped Types Using Swagger.md
+57. Getting Started With Compodoc.md
