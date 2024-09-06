@@ -1,26 +1,34 @@
-## 1. Project setup
+## Section 1: Authentication
 
-## 2. Validation + Config + Logging
+### 1. Installation
 
-## 3. Prisma
+- nest , prisma, bcrypt , jwt
 
-- installation de prisma
-- création de l'utilisateur
+### 2. login user
 
-## 4. Passport JS
+### 3. jwt (generation du token)
 
-## 5. Passport JS - Jwt
+- génération du token
 
-## 6. Mise en œuvre du JWT Passport
+### 4. protection d'authentification par une Route
 
-## 7. Implémenter des protections de route protégée et de stratégie JWT
+- création d'un guard pour l'authentification
 
-## 8. Extension des gardes (a lire et mettre en place)
+### 5. protection d'authentification Globalement & Route Publique
 
-## 9. Activer l'authentification globalement (a exploiter et experimenter)
+## Section 2: Passport JS
 
-## Section 2: Shoppy Authentication
+Passport fournit une stratégie appelée passport-local qui implémente un mécanisme d'authentification par nom d'utilisateur/mot de passe, qui convient à nos besoins pour cette partie de notre cas d'utilisation.
 
-### 12. Local Strategy
+```bash
+$ npm install --save @nestjs/passport passport passport-local
+$ npm install --save-dev @types/passport-local
+```
 
-### 13. Sign JWT
+### 6. Mise en œuvre du passeport local
+
+### 7. Protections de passeport intégrées
+
+### 8. Fonctionnalité JWT
+
+### 9. Mise en œuvre du JWT Passport (Protection des points de terminaison)

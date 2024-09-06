@@ -1,24 +1,18 @@
-import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
-import { LocalAuthGuard } from './guards/local-auth.guard';
-import { CurrentUser } from './current-user.decorator';
-import { User } from '@prisma/client';
-import { Response } from 'express';
+import { Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { Public } from './decators/auth.decorator';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
-  // @Post('login')
-  // login(){
-  //   return this.authService.login()
-  // }
+  constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @UseGuards(LocalAuthGuard)
+  // @UseGuards(AuthGuard('local'))
   @Post('login')
-  login(
-    @CurrentUser() user: User,
-    @Res({ passthrough: true }) response: Response,
-  ) {
-    return this.authService.login(user, response);
+  async login(@Request() req: any) {
+    console.log(req.user);
+    return this.authService.login(req.user);
   }
 }

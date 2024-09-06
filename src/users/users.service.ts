@@ -1,38 +1,55 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { CreateUserRequest } from './dto/create-user.request';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './dto/create-user.dto';
+import { Prisma } from '@prisma/client';
 
-// export type Usero = any;
+// This should be a real class/interface representing a user entity
+export type User = any;
 @Injectable()
 export class UsersService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  async createUser(data: CreateUserRequest): Promise<Omit<User, 'password'>> {
-    console.log('🚀 ~ UsersService ~ createUser ~ data:', data);
-    // const hashedPassword = await bcrypt.hash(data.password, 10);
+  private readonly users = [
+    {
+      userId: 1,
+      username: 'john',
+      password: 'changeme',
+    },
+    {
+      userId: 2,
+      username: 'maria',
+      password: 'guess',
+    },
+  ];
 
+  async createUser(createUserDto: CreateUserDto) {
     try {
       return await this.prismaService.user.create({
-        data: { ...data, password: await bcrypt.hash(data.password, 10) },
+        data: {
+          ...createUserDto,
+          password: await bcrypt.hash(createUserDto.password, 10),
+        },
         select: {
-          id: true,
           email: true,
+          id: true,
         },
       });
-    } catch (error) {
-      console.log('🚀 ~ UsersService ~ createUser ~ error:', error);
-      if (error.code === 'P2002') {
+    } catch (err) {
+      if (err.code === 'P2002') {
         throw new UnprocessableEntityException('Email already exists.');
       }
-      throw error;
+      throw err;
     }
   }
 
   async getUser(filter: Prisma.UserWhereUniqueInput) {
-    return await this.prismaService.user.findUniqueOrThrow({
+    return this.prismaService.user.findUniqueOrThrow({
       where: filter,
     });
+  }
+
+  async findOne(username: string): Promise<User | undefined> {
+    return this.users.find((user) => user.username === username);
   }
 }

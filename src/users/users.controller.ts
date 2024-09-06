@@ -1,15 +1,15 @@
-import { Body, Controller, Get, Post, UseInterceptors } from '@nestjs/common';
-import { CreateUserRequest } from './dto/create-user.request';
+import { Body, Controller, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { NoFilesInterceptor } from '@nestjs/platform-express';
+import { CreateUserDto } from './dto/create-user.dto';
+import { Public } from 'src/auth/decators/auth.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @Public()
   @Post()
-  @UseInterceptors(NoFilesInterceptor())
-  createUser(@Body() request: CreateUserRequest) {
-    // return ' You sent a request to the user enpoint';
-    return this.usersService.createUser(request);
+  createUser(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.createUser(createUserDto);
   }
 }
