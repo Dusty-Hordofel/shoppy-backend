@@ -8,6 +8,11 @@ import { AuthService } from './auth.service';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+  // @Post('login')
+  // login(){
+  //   return this.authService.login()
+  // }
+
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(
