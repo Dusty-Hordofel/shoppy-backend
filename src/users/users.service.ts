@@ -1,34 +1,18 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { PrismaService } from '../prisma/prisma.service';
+import { Prisma, User } from '@prisma/client';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Prisma } from '@prisma/client';
-
-// This should be a real class/interface representing a user entity
-export type User = any;
 @Injectable()
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'john',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
-
-  async createUser(createUserDto: CreateUserDto) {
+  async createUser(data: CreateUserDto) {
     try {
       return await this.prismaService.user.create({
         data: {
-          ...createUserDto,
-          password: await bcrypt.hash(createUserDto.password, 10),
+          ...data,
+          password: await bcrypt.hash(data.password, 10),
         },
         select: {
           email: true,
@@ -43,13 +27,35 @@ export class UsersService {
     }
   }
 
-  async getUser(filter: Prisma.UserWhereUniqueInput) {
-    return this.prismaService.user.findUniqueOrThrow({
-      where: filter,
+  // async getUser(filter: Prisma.UserWhereUniqueInput) {
+  //   return this.prismaService.user.findUniqueOrThrow({
+  //     where: filter,
+  //   });
+  // }
+  // Recherche un utilisateur par son email
+  // async findOne(email: string) {
+  //   return this.prismaService.user.findUnique({ where: { email } });
+  // }
+  // Recherche un utilisateur par des critères dynamiques
+  async findOne(criteria: Partial<User>): Promise<User | null> {
+    return this.prismaService.user.findFirst({
+      where: criteria,
     });
   }
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+  findAll() {
+    return `This action returns all users`;
+  }
+
+  // findOne(id: number) {
+  //   return `This action returns a #${id} user`;
+  // }
+
+  // update(id: number, updateUserDto: UpdateUserDto) {
+  //   return `This action updates a #${id} user`;
+  // }
+
+  remove(id: number) {
+    return `This action removes a #${id} user`;
   }
 }

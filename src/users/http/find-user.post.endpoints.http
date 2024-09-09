@@ -1,0 +1,4 @@
+GET http://localhost:5500/users/johnoal@gmail.com
+Content-Type:application/json
+# {"email": "johnoal@gmail.com"}
+{"id": "66dd350c2f10c69900bbc8f9"}
