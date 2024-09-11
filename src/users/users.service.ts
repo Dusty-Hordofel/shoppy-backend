@@ -27,16 +27,12 @@ export class UsersService {
     }
   }
 
-  // async getUser(filter: Prisma.UserWhereUniqueInput) {
-  //   return this.prismaService.user.findUniqueOrThrow({
-  //     where: filter,
-  //   });
-  // }
-  // Recherche un utilisateur par son email
-  // async findOne(email: string) {
-  //   return this.prismaService.user.findUnique({ where: { email } });
-  // }
-  // Recherche un utilisateur par des critères dynamiques
+  async getUser(filter: Prisma.UserWhereUniqueInput) {
+    return this.prismaService.user.findUniqueOrThrow({
+      where: filter,
+    });
+  }
+
   async findOne(criteria: Partial<User>): Promise<User | null> {
     return this.prismaService.user.findFirst({
       where: criteria,
@@ -46,14 +42,6 @@ export class UsersService {
   findAll() {
     return `This action returns all users`;
   }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} user`;
-  // }
-
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
 
   remove(id: number) {
     return `This action removes a #${id} user`;

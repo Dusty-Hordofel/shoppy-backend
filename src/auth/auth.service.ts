@@ -1,62 +1,52 @@
-import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import ms from 'ms';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from 'src/users/users.service';
+import { User } from '@prisma/client';
+import { Response } from 'express';
+import { UsersService } from '../users/users.service';
+import { ConfigService } from '@nestjs/config';
+import { TokenPayload } from './token-payload.interface';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
   ) {}
 
-  test() {
-    return 'Molo';
-  }
+  async login(user: User, response: Response) {
+    const expires = new Date();
+    expires.setMilliseconds(
+      expires.getMilliseconds() +
+        ms(this.configService.getOrThrow<string>('JWT_EXPIRATION')),
+    );
 
-  // Valide l'utilisateur en vérifiant l'email et le mot de passe
-  async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.usersService.findOne({ email });
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const { password, ...result } = user;
-      return result;
-    }
-    throw new UnauthorizedException('Invalid credentials');
-  }
+    const tokenPayload: TokenPayload = {
+      userId: user.id,
+    };
+    const token = this.jwtService.sign(tokenPayload);
 
-  // Génère un JWT et le stocke dans un cookie
-  async login(user: any, res: any) {
-    const payload = { email: user.email, sub: user.id };
-    const token = this.jwtService.sign(payload);
-
-    res.cookie('Authentication', token, {
+    response.cookie('Authentication', token, {
+      secure: true,
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      expires,
     });
 
-    res.status(HttpStatus.OK).json({ message: 'Login successful' });
-    // return { message: 'Login successful' };
+    return { tokenPayload };
   }
-  // create(createAuthDto: CreateAuthDto) {
-  //   return 'This action adds a new auth';
-  // }
 
-  // findAll() {
-  //   return `This action returns all auth`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} auth`;
-  // }
-
-  // update(id: number, updateAuthDto: UpdateAuthDto) {
-  //   return `This action updates a #${id} auth`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} auth`;
-  // }
+  async verifyUser(email: string, password: string) {
+    try {
+      const user = await this.usersService.getUser({ email });
+      const authenticated = await bcrypt.compare(password, user.password);
+      if (!authenticated) {
+        throw new UnauthorizedException();
+      }
+      return user;
+    } catch (err) {
+      throw new UnauthorizedException('Credentials are not valid.');
+    }
+  }
 }

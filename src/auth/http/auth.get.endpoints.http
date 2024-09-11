@@ -1,4 +1,0 @@
-# GET http://localhost:6600/auth/profile 
-POST http://localhost:5500/auth
-Content-Type:application/json
-{"email": "johnoaal@gmail.com", "password": "IdReF5akmm3PaF9OQuNClwOWLR8yCH16-3wdUJedJr4"}

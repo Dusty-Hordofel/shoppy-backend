@@ -6,19 +6,30 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from '@prisma/client';
+import { NoFilesInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { TokenPayload } from 'src/auth/token-payload.interface';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @UseInterceptors(NoFilesInterceptor())
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  getMe(@CurrentUser() user: TokenPayload) {
+    return user;
   }
 
   @Get()
@@ -26,25 +37,10 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.usersService.findOne(id);
-  // }
-  // @Post()
-  // getUser(filter: any) {
-  //   return this.usersService.findOne(filter);
-  // }
-
-  // Endpoint pour trouver un utilisateur avec des critères dynamiques
-  // @Post('find')
-  // async findUser(@Body() criteria: Partial<User>): Promise<User | null> {
-  //   return this.usersService.findOne(criteria);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.usersService.update(+id, updateUserDto);
-  // }
+  @Post('find')
+  getUser(filter: any) {
+    return this.usersService.findOne(filter);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

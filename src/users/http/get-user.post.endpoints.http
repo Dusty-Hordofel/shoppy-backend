@@ -1,6 +1,0 @@
-# POST http://localhost:5500/users/find
-POST http://localhost:5500/users
-Content-Type:application/json
-
-# {"id": "66d44ebb17e30c4a9b4f0fa5"}
-{"email": "johnoal@gmail.com"}

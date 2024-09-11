@@ -1,39 +1,29 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Res,
-  HttpStatus,
-} from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { User } from '@prisma/client';
 import { Response } from 'express';
-// import { CreateAuthDto } from './dto/create-auth.dto';
-// import { UpdateAuthDto } from './dto/update-auth.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+// import { CurrentUser } from './current-user.decorator';
+import { AuthService } from './auth.service';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { TokenPayload } from './token-payload.interface';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
-  @Post()
-  async test(@Body() createAuthDto: CreateAuthDto, @Res() res: Response) {
-    const user = await this.authService.validateUser(
-      createAuthDto.email,
-      createAuthDto.password,
-    );
-    return this.authService.login(user, res);
-    // if (user) {
-    //   // Répondre avec succès en envoyant une réponse JSON avec statut 200
-    //   return res.status(HttpStatus.OK).json(user);
-    // } else {
-    //   // Répondre avec une erreur en cas d'échec de validation
-    //   return res
-    //     .status(HttpStatus.UNAUTHORIZED)
-    //     .json({ message: 'Invalid credentials' });
-    // }
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  login(
+    @CurrentUser() user: User,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.login(user, response);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  getMe(@CurrentUser() user: TokenPayload) {
+    return user;
   }
 }
