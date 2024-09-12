@@ -34,3 +34,5 @@ $ npm install --save-dev @types/passport-local
 ### 9. Mise en œuvre du JWT Passport (Protection des points de terminaison)
 
 ### 10. JSON Payloads
+
+### 11. Products
