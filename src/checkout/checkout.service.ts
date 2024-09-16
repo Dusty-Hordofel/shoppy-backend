@@ -16,7 +16,7 @@ export class CheckoutService {
     const product = await this.productService.getProduct(productId);
     return this.stripe.checkout.sessions.create({
       metadata: {
-        productId,
+        productId, //we will use it on handleCheckoutWebhook and And we can associate that checkout session with the product thanks to the metadata.
       },
       line_items: [
         {
@@ -38,16 +38,17 @@ export class CheckoutService {
     });
   }
 
-  // async handleCheckoutWebhook(event: any) {
-  //   if (event.type !== 'checkout.session.completed') {
-  //     return;
-  //   }
+  async handleCheckoutWebhook(event: any) {
+    console.log('🚀 ~ CheckoutService ~ handleCheckoutWebhook ~ event:', event);
+    if (event.type !== 'checkout.session.completed') {
+      return;
+    }
 
-  //   const session = await this.stripe.checkout.sessions.retrieve(
-  //     event.data.object.id,
-  //   );
-  //   // await this.productService.update(parseInt(session.metadata.productId), {
-  //   //   sold: true,
-  //   // });
-  // }
+    const session = await this.stripe.checkout.sessions.retrieve(
+      event.data.object.id,
+    );
+    await this.productService.update(session.metadata.productId, {
+      sold: true,
+    });
+  }
 }
