@@ -1,12 +1,15 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
+  Controller,
+  FileTypeValidator,
+  Get,
+  MaxFileSizeValidator,
   Param,
-  Delete,
+  ParseFilePipe,
+  Post,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -14,6 +17,9 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { TokenPayload } from 'src/auth/token-payload.interface';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('products')
 export class ProductsController {
@@ -32,5 +38,10 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard)
   async getProducts() {
     return this.productsService.getProducts();
+  }
+  @Get(':productId')
+  @UseGuards(JwtAuthGuard)
+  async getProduct(@Param('productId') productId: string) {
+    return this.productsService.getProduct(productId);
   }
 }

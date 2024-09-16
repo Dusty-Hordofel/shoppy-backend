@@ -1,0 +1,7 @@
+POST http://localhost:5500/api/v1/products
+Content-Type:application/json
+{"name": "safou", 
+"description": "IdReF5akmm3PaF9OQuNClwOWLR8yCH16-3wdUJedJr4",
+"price":55,
+"userId": "66e110943055c4ee15f69c08"
+}

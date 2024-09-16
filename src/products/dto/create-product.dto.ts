@@ -10,6 +10,10 @@ export class CreateProductDto {
   @IsNotEmpty()
   description: string;
 
+  @IsString()
+  @IsNotEmpty()
+  image: string;
+
   @IsNumber()
   @Type(() => Number)
   price: number;

@@ -36,3 +36,5 @@ $ npm install --save-dev @types/passport-local
 ### 10. JSON Payloads
 
 ### 11. Products
+
+### 12. Upload Products
