@@ -10,7 +10,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   // Activer CORS avec des options personnalisées
   app.enableCors({
-    origin: 'http://localhost:3000', // Remplacez par l'origine du front-end
+    origin: 'http://localhost:3001', // Remplacez par l'origine du front-end
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS', // Méthodes autorisées
     allowedHeaders: 'Content-Type, Accept, Authorization', // En-têtes autorisés
     credentials: true, // Permettre l'envoi de cookies

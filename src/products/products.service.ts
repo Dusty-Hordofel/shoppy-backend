@@ -11,6 +11,7 @@ export class ProductsService {
     private readonly prismaService: PrismaService,
     private readonly productsGateway: ProductsGateway,
   ) {}
+
   async createProduct(data: CreateProductDto, userId: string) {
     const product = await this.prismaService.product.create({
       data: {
@@ -18,7 +19,6 @@ export class ProductsService {
         userId,
       },
     });
-
     this.productsGateway.handleProductUpdated();
     return product;
   }

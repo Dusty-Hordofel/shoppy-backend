@@ -19,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true, // Rendre le module de configuration global
     }),
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [AppService],
